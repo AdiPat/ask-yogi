@@ -1,0 +1,52 @@
+{
+  "name": "ask-yogi",
+  "version": "1.0.0",
+  "description": "Ask an AI Yogi questions about anything! 🕉️",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "rm -rf dist/ && rm -rf types/ && tsc",
+    "start": "npm run build && node dist/index.js",
+    "start:dev": "nodemon --watch src --exec \"tsc && node dist/index.js\" --ext ts,tsx,js,jsx",
+    "test": "vitest"
+  },
+  "bin": {
+    "ask-yogi": "dist/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AdiPat/ask-yogi.git"
+  },
+  "keywords": [
+    "ai",
+    "yoga-tech",
+    "ask-yogi",
+    "generative-ai"
+  ],
+  "author": "Aditya Patange (AdiPat), Sarvesh Bhujle, Shantanu Borkar",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/AdiPat/ask-yogi/issues"
+  },
+  "homepage": "https://github.com/AdiPat/ask-yogii#readme",
+  "devDependencies": {
+    "@types/cors": "^2.8.17",
+    "@types/express": "^5.0.0",
+    "nodemon": "^3.1.9",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.7.3"
+  },
+  "dependencies": {
+    "@ai-sdk/anthropic": "^1.1.11",
+    "@ai-sdk/openai": "^1.1.14",
+    "@types/readline-sync": "^1.4.8",
+    "ai": "^4.1.46",
+    "chalk": "^4.0.0",
+    "commander": "^13.1.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "inquirer": "^12.4.2",
+    "readline-sync": "^1.4.10",
+    "vitest": "^3.0.7",
+    "vitest-mock-extended": "^3.0.1"
+  }
+}
