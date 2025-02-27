@@ -105,6 +105,9 @@ async function run() {
         loader.stop();
         console.log(chalk.green(`Yogi says: ${response.response}`));
         console.log(chalk.green(`Teachings: ${response.teachings.join(", ")}`));
+        console.log(
+          chalk.yellow("\nContinue your conversation or type 'exit' to quit:")
+        );
       });
     });
   } else {
