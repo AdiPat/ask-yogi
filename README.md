@@ -1,9 +1,8 @@
-# Yoga API 🌏
+# Ask Yogi
 
-A simple API for discovering, understanding, learning, and integrating the science of Yoga. 
+Ask an AI Yogi questions about anytthing!
 
-
-<p align="center"><img src="./assets/yoga_api_logo.png" width="230" alt="Khoj Logo"></p>
+<p align="center"><img src="./assets/ask_yogi_logo.png" width="230" alt="Ask Yogi Logo"></p>
 
 <div align="center">
 
@@ -28,56 +27,31 @@ A simple API for discovering, understanding, learning, and integrating the scien
 
 </div>
 
-## Background 
+## Background
 
-Yoga API empowers developers to create mindful applications by seamlessly integrating yoga knowledge and practices. With Yoga API, you can deploy feature-rich applications related to Yoga with minimal effort, offering users spiritual insights, personalized plans, and ancient wisdom at their fingertips. 
+It all started with a simple idea: What if you could ask a Yogi anything? Inspired by the **Ask Sadhguru** feature in his **Miracle of Mind app**, I wanted to create something even more flexible—a system where users could interact with a Yogi whose personality and wisdom could be shaped to match their needs. After all, every Yogi has their own unique way of answering life’s big (and small) questions, so why not bring that individuality into AI?
 
-The development of Yoga API is an initiative by ShinCy Labs, on the special occasion of MahaShivRatri 2025. Our goal was to build something special, useful and Open Source for the world on this auspicious day. 
+That’s how Ask Yogi was born.
 
-We provide the foundation (API) and let developers and product designers create the kind of user experiences they desire using our features as the underlying platform.
+This project is part of a larger initiative—Yoga API, developed by ShinCy Labs as a special tribute to MahaShivRatri 2025. We wanted to build something meaningful, useful, and open-source for the world on this auspicious day. And in the process of creating Yoga API, we stumbled upon a cool idea—why not let people talk to a Yogi? Thus, Ask Yogi became its own feature, allowing users to have deep, insightful, and even playful conversations with a digital sage.
 
+Right now, Ask Yogi runs entirely on the command line—simple, fast, and distraction-free. But who knows? If the response is great, we might build a full-fledged interface in the future. For now, we’re laser-focused on perfecting the core experience.
 
-## Key Features
-
-- 🌟 **Ask Yogi** - AI-powered Q&A on Yoga.
-
-- 📖 **Yoga Sutra Search** - Explore ancient Yoga scriptures.
-
-- 📅 **Karma Yoga Plan** - Provide your daily schedule and receive Karma Yoga practice tips.
-
-- 📰 **Yoga News** - Keep up with the Yoga world.
+Want to test it out? Go ahead—ask away!
 
 ## Getting Started
 
 1. **Install the package:**
 
-   ```bash
-   npm install yoga-api
-   ```
-
-2. **Set up environment variables:**
-
-   Create a `.env` file in your project's root directory and add your API key:
-
-   ```plaintext
-   OPENAI_API_KEY=your-openai-api-key
-   FIRECRAWL_API_KEY=your-firecrawl-api-key
-   SERPER_API_KEY=your-serper-api-key
-   ```
-
-3. **Use the API in your project:**
-
-```typescript
-import { YogaAPI } from "yoga-api";
-
-const yogaAPI = new YogaAPI();
-
-yogaAPI.startServer({
-  port: 3000,
-});
+```bash
+npm install ask-yogi
 ```
 
-4. **TBA:** Please refer to the API documentation for further details on usage.
+2. **Run the CLI:**
+
+```bash
+npx ask-yogi --help
+```
 
 ## Contributing
 
@@ -85,7 +59,6 @@ We welcome contributions from developers around the globe. To get started, pleas
 
 ## Licence
 
-Yoga API is distributed under the MIT License. Refer to the LICENSE file for full details. Please also read the Terms of Use and Trademark.
+Ask Yoga is distributed under the MIT License. Refer to the LICENSE file for full details. Please also read the Terms of Use and Trademark.
 
-> "Yoga is the journey of the self, through the self, to the self." — The Bhagavad Gita
-
+> "The mind is a product of of intricate, self-organizing patterns influenced by the natural flow of impermanence (shakti) created by the self, either consciously or unconsciously." — Adi
