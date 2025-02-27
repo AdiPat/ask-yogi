@@ -5,6 +5,7 @@ import { Command } from "commander";
 import chalk from "chalk";
 import { ConfigManager } from "./core/config-manager";
 import { AskYogiService } from "./services/ask-yogi.service";
+import { Loader } from "./core/loader";
 
 dotenv.config({
   path: "./.env",
@@ -36,14 +37,22 @@ program
 program
   .option("-q, --question <question>", "Ask a question")
   .option("-l, --liveMode", "Start an infinite question answering loop")
-  .option("-r, --reconfigure", "Reconfigure the provider and API key");
+  .option("-r, --reconfigure", "Reconfigure the provider and API key")
+  .option("-h, --help", "Display help for command"); // Added help option
 
 async function run() {
+  const loader = new Loader();
+  loader.start("Initializing Ask Yogi CLI...", "cyan", "white");
   program.parse(process.argv);
 
   const options = program.opts();
-  const configManager = new ConfigManager();
 
+  if (options.help) {
+    program.help();
+    return;
+  }
+
+  const configManager = new ConfigManager();
   const initStatus = await configManager.init();
 
   if (!initStatus && !options.reconfigure)
@@ -67,22 +76,33 @@ async function run() {
     apiKey: config.apiKey,
   });
 
+  loader.stop("Ask Yogi CLI initialized.");
+
   if (options.question) {
     console.log(chalk.yellow(`You asked: ${options.question}`));
+    loader.start("Thinking...", "cyan", "white");
     const response = await askYogiService.askYogi(options.question);
+    loader.stop();
     console.log(chalk.green(`Yogi says: ${response.response}`));
     console.log(chalk.green(`Teachings: ${response.teachings.join(", ")}`));
   } else if (options.liveMode) {
     console.log(chalk.yellow("Entering live mode. Type your questions below:"));
     process.stdin.setEncoding("utf-8");
+    console.log(chalk.yellow("Type 'exit' to exit live mode."));
+
+    console.log(
+      chalk.green("\nYogi says: Welcome! I am here to answer your questions.")
+    );
+
     process.stdin.on("data", async (data) => {
+      loader.start("Thinking...", "cyan", "white");
       const question = data.toString().trim();
       if (question.toLowerCase() === "exit") {
         console.log(chalk.red("Exiting live mode."));
         process.exit();
       }
-      console.log(chalk.yellow(`You asked: ${question}`));
       await askYogiService.askYogi(question).then((response) => {
+        loader.stop();
         console.log(chalk.green(`Yogi says: ${response.response}`));
         console.log(chalk.green(`Teachings: ${response.teachings.join(", ")}`));
       });
