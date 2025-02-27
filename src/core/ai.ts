@@ -15,6 +15,14 @@ export const AvailableModels = {
   },
 };
 
+const DEFAULT_OPENAI_MODEL = `openai/${AvailableModels.openai.gpt_4o}`;
+const DEFAULT_ANTHROPIC_MODEL = `anthropic/${AvailableModels.anthropic.claude_37_sonnet_latest}`;
+
+export const DEFAULT_LLM_MODELS = {
+  openai: DEFAULT_OPENAI_MODEL,
+  anthropic: DEFAULT_ANTHROPIC_MODEL,
+};
+
 export function getModelLib(
   model: string,
   apiKey = ""

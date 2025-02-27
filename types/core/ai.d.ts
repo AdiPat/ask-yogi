@@ -11,5 +11,9 @@ export declare const AvailableModels: {
         claude_35_haiku_latest: string;
     };
 };
+export declare const DEFAULT_LLM_MODELS: {
+    openai: string;
+    anthropic: string;
+};
 export declare function getModelLib(model: string, apiKey?: string): LanguageModelV1 | null;
 export declare function llmPingTest(provider: string, apiKey: string): Promise<boolean>;

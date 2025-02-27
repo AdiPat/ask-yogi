@@ -3,6 +3,7 @@ export interface AskYogiServiceOptions {
     model?: string;
     yogiProfile?: Record<string, any>;
     verbose?: boolean;
+    apiKey?: string;
 }
 export interface AskYogiResponse {
     query: string;

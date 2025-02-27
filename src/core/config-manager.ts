@@ -2,14 +2,18 @@ import fs from "fs";
 import os from "os";
 import path from "path";
 import inquirer from "inquirer";
-import { llmPingTest } from "./ai";
+import { DEFAULT_LLM_MODELS, llmPingTest } from "./ai";
 import chalk from "chalk";
 
 const CONFIG_DIR = path.join(os.homedir(), ".askyogi");
 const CONFIG_FILE = path.join(CONFIG_DIR, "config.json");
 
 export class ConfigManager {
-  private config: { provider?: string; apiKey?: string } = {};
+  private config: {
+    provider?: "openai" | "anthropic";
+    apiKey?: string;
+    defaultModel?: string;
+  } = {};
 
   constructor() {
     this.loadConfig();
@@ -19,6 +23,7 @@ export class ConfigManager {
     if (fs.existsSync(CONFIG_FILE)) {
       const rawData = fs.readFileSync(CONFIG_FILE, "utf-8");
       this.config = JSON.parse(rawData);
+      this.loadDefaultModelFromProvider();
     }
   }
 
@@ -26,7 +31,19 @@ export class ConfigManager {
     if (!fs.existsSync(CONFIG_DIR)) {
       fs.mkdirSync(CONFIG_DIR);
     }
+
+    this.loadDefaultModelFromProvider();
+
     fs.writeFileSync(CONFIG_FILE, JSON.stringify(this.config, null, 2));
+  }
+
+  private loadDefaultModelFromProvider() {
+    if (!this.config.provider) {
+      console.error(chalk.redBright("Provider is missing in the config file."));
+      throw new Error("Provider is missing in the config file.");
+    }
+
+    this.config.defaultModel = DEFAULT_LLM_MODELS[this.config.provider];
   }
 
   public isConfigured(): boolean {
@@ -35,23 +52,25 @@ export class ConfigManager {
 
   public async setup() {
     console.log("Configuring Ask Yogi CLI...");
-    const answers = await inquirer.prompt([
-      {
-        type: "list",
-        name: "provider",
-        message: "Which provider do you want to use?",
-        choices: ["anthropic", "openai"],
-      },
-      {
-        type: "input",
-        name: "apiKey",
-        message: (answers) =>
-          `Enter your ${answers.provider.toUpperCase()}_API_KEY:`,
-      },
-    ]);
+    const answers: { provider: "openai" | "anthropic"; apiKey: string } =
+      await inquirer.prompt([
+        {
+          type: "list",
+          name: "provider",
+          message: "Which provider do you want to use?",
+          choices: ["anthropic", "openai"],
+        },
+        {
+          type: "input",
+          name: "apiKey",
+          message: (answers) =>
+            `Enter your ${answers.provider.toUpperCase()}_API_KEY:`,
+        },
+      ]);
 
     this.config.provider = answers.provider;
     this.config.apiKey = answers.apiKey;
+    this.loadDefaultModelFromProvider();
 
     console.log(chalk.cyan("Testing the configuration..."));
     const pingTestResult = await llmPingTest(answers.provider, answers.apiKey);
@@ -94,5 +113,13 @@ export class ConfigManager {
 
     console.log(chalk.greenBright("Configuration is valid."));
     return true;
+  }
+
+  public getConfig(): {
+    provider?: "openai" | "anthropic";
+    apiKey?: string;
+    defaultModel?: string;
+  } {
+    return this.config;
   }
 }

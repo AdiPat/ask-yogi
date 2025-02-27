@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 import { Command } from "commander";
 import chalk from "chalk";
 import { ConfigManager } from "./core/config-manager";
+import { AskYogiService } from "./services/ask-yogi.service";
 
 dotenv.config({
   path: "./.env",
@@ -57,20 +58,34 @@ async function run() {
     await configManager.setup();
   }
 
+  const config = configManager.getConfig();
+  console.log(chalk.cyan(`Using provider: ${config.provider}`));
+  console.log(chalk.cyan(`Using default model: ${config.defaultModel}`));
+
+  const askYogiService = new AskYogiService({
+    model: config.defaultModel,
+    apiKey: config.apiKey,
+  });
+
   if (options.question) {
     console.log(chalk.yellow(`You asked: ${options.question}`));
-    // Add logic to handle the question and provide a response
+    const response = await askYogiService.askYogi(options.question);
+    console.log(chalk.green(`Yogi says: ${response.response}`));
+    console.log(chalk.green(`Teachings: ${response.teachings.join(", ")}`));
   } else if (options.liveMode) {
     console.log(chalk.yellow("Entering live mode. Type your questions below:"));
     process.stdin.setEncoding("utf-8");
-    process.stdin.on("data", (data) => {
+    process.stdin.on("data", async (data) => {
       const question = data.toString().trim();
       if (question.toLowerCase() === "exit") {
         console.log(chalk.red("Exiting live mode."));
         process.exit();
       }
       console.log(chalk.yellow(`You asked: ${question}`));
-      // Add logic to handle the question and provide a response
+      await askYogiService.askYogi(question).then((response) => {
+        console.log(chalk.green(`Yogi says: ${response.response}`));
+        console.log(chalk.green(`Teachings: ${response.teachings.join(", ")}`));
+      });
     });
   } else {
     program.help();

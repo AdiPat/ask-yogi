@@ -23,9 +23,12 @@ export class AskYogiService {
   `;
 
   private options: AskYogiServiceOptions;
-
   constructor(options?: AskYogiServiceOptions) {
     this.options = options || this.getDefaultOptions();
+
+    if (!this.options.apiKey) {
+      throw new Error("API key is required to use the service.");
+    }
   }
 
   private getDefaultOptions(): AskYogiServiceOptions {
@@ -34,13 +37,15 @@ export class AskYogiService {
       model: this.DEFAULT_LLM_MODEL,
       yogiProfile: {},
       verbose: false,
+      apiKey: this.options?.apiKey,
     };
   }
 
   public async askYogi(question: string): Promise<AskYogiResponse> {
     try {
       let modelLib: LanguageModelV1 | null = getModelLib(
-        this.options.model || this.DEFAULT_LLM_MODEL
+        this.options.model || this.DEFAULT_LLM_MODEL,
+        this.options.apiKey
       );
 
       if (!modelLib) {
